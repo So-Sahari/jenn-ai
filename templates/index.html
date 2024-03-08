@@ -1,0 +1,44 @@
+{{define "index.html"}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JennAI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.7"
+      integrity="sha384-EAzY246d6BpbWR7sQ8+WEm40J8c3dHFsqC58IgPlh4kMbRRI6P6WA+LA/qGAyAu8"
+      crossorigin="anonymous"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <style>
+    .tab-space {
+        display: inline-block;
+        margin-left: 2em;
+    }
+    </style>
+  </head>
+  <body class="bg-gray-900">
+    <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4">
+      <p style="font-size: 24px; text-align: center;">{{.Message}}</p>
+      <div class="pl-40">
+        {{template "dropdowns.html" .}}
+      </div>
+    </div>
+
+    <div class="pl-40 pr-40 mb-20">
+      {{template "chat.html" .}}
+    </div>
+    <div class="pl-40 pr-40">
+      {{template "prompt.html" .}}
+    </div>
+  </body>
+</html>
+{{end}}

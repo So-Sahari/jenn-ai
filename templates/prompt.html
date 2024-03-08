@@ -1,0 +1,40 @@
+{{define "prompt.html"}}
+<script>
+document.addEventListener('htmx:beforeRequest', function(event) {
+  if (event.target.id === 'submitBtn') {
+      event.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
+});
+
+document.addEventListener('htmx:afterRequest', function(event) {
+  if (event.target.id === 'submitBtn') {
+      event.target.innerHTML = '<i class="fa-regular fa-paper-plane"></i>';
+      document.getElementById('message-textarea').value = '';
+  }
+});
+</script>
+
+<div class="pl-40 pr-40 pb-6 shadow fixed inset-x-0 bottom-0">
+  <form>
+    <div class="relative">
+      <textarea
+        id="message-textarea"
+        class="w-full p-2 pr-20 pb-6 border border-gray-200 text-black rounded-md"
+        placeholder="Ask your question here"
+        name="prompt"
+      ></textarea>
+
+      <button 
+        id="submitBtn"
+        hx-post="/run"
+        hx-trigger="click, keyup[ctrlKey&&key=='Enter'] from:textarea"
+        hx-swap="beforeend"
+        hx-target="#messages"
+        class="absolute top-0 right-0 mt-2 mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        <i class="fa-regular fa-paper-plane"></i>
+      </button>
+    </div>
+  </form>
+</div>
+{{end}}
