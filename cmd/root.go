@@ -18,10 +18,9 @@ var (
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd = &cobra.Command{
-		Use:   "baa",
-		Short: "run bedrock prompts from the commandline",
-		Long: `Bedrock AI Assistant
-Run bedrock prompts from the commandline.`,
+		Use:   "jenn-ai",
+		Short: "call LLMs from the commandline and through a server",
+		Long:  `call LLMs from the commandline and through a server`,
 	}
 )
 
