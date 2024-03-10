@@ -84,6 +84,26 @@ func (m *AWSModelConfig) constructPayload(message string) ([]byte, error) {
 			TopP:              m.TopP,
 			TopK:              m.TopK,
 		}
+		// TODO: work on v3
+		//body := models.ClaudeMessagesInput{
+		//	AnthropicVersion: "bedrock-2023-05-31",
+		//	Messages: []models.ClaudeMessage{
+		//		{
+		//			Role: "user",
+		//			Content: []models.ClaudeContent{
+		//				{
+		//					Type: "text",
+		//					Text: message,
+		//				},
+		//			},
+		//		},
+		//	},
+		//	MaxTokens:   m.MaxTokens,
+		//	Temperature: m.Temperature,
+		//	TopP:        m.TopP,
+		//	TopK:        m.TopK,
+		//}
+
 		payload, err := json.Marshal(body)
 		if err != nil {
 			return []byte{}, err
