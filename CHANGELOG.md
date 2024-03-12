@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/So-Sahari/jenn-ai/compare/v1.0.0...v1.1.0) (2024-03-12)
+
+
+### Features
+
+* add support for claude v3 & mistral models ([90de74e](https://github.com/So-Sahari/jenn-ai/commit/90de74e421e3e5007694ba82e0da3822de9ec9d1))
+
 ## 1.0.0 (2024-03-10)
 
 
