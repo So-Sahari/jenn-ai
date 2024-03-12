@@ -75,8 +75,32 @@ func (m *AWSModelConfig) InvokeModel(ctx context.Context, api ClientRuntimeAPI, 
 
 func (m *AWSModelConfig) constructPayload(message string) ([]byte, error) {
 	switch {
-	case strings.Contains(m.ModelID, "anthropic"):
+	case strings.Contains(m.ModelID, "sonnet"):
+		body := models.ClaudeMessagesInput{
+			AnthropicVersion: "bedrock-2023-05-31",
+			Messages: []models.ClaudeMessage{
+				{
+					Role: "user",
+					Content: []models.ClaudeContent{
+						{
+							Type: "text",
+							Text: message,
+						},
+					},
+				},
+			},
+			MaxTokens:   m.MaxTokens,
+			Temperature: m.Temperature,
+			TopP:        m.TopP,
+			TopK:        m.TopK,
+		}
 
+		payload, err := json.Marshal(body)
+		if err != nil {
+			return []byte{}, err
+		}
+		return payload, nil
+	case strings.Contains(m.ModelID, "anthropic"):
 		body := models.ClaudeModelInputs{
 			Prompt:            fmt.Sprintf("\n\nHuman: %s\n\nAssistant:", message),
 			MaxTokensToSample: m.MaxTokens,
@@ -84,25 +108,6 @@ func (m *AWSModelConfig) constructPayload(message string) ([]byte, error) {
 			TopP:              m.TopP,
 			TopK:              m.TopK,
 		}
-		// TODO: work on v3
-		//body := models.ClaudeMessagesInput{
-		//	AnthropicVersion: "bedrock-2023-05-31",
-		//	Messages: []models.ClaudeMessage{
-		//		{
-		//			Role: "user",
-		//			Content: []models.ClaudeContent{
-		//				{
-		//					Type: "text",
-		//					Text: message,
-		//				},
-		//			},
-		//		},
-		//	},
-		//	MaxTokens:   m.MaxTokens,
-		//	Temperature: m.Temperature,
-		//	TopP:        m.TopP,
-		//	TopK:        m.TopK,
-		//}
 
 		payload, err := json.Marshal(body)
 		if err != nil {
@@ -110,7 +115,6 @@ func (m *AWSModelConfig) constructPayload(message string) ([]byte, error) {
 		}
 		return payload, nil
 	case strings.Contains(m.ModelID, "cohere"):
-
 		body := models.CommandModelInput{
 			Prompt:            message,
 			MaxTokensToSample: m.MaxTokens,
@@ -121,6 +125,26 @@ func (m *AWSModelConfig) constructPayload(message string) ([]byte, error) {
 			ReturnLiklihoods:  "NONE",
 			NumGenerations:    1,
 		}
+
+		payload, err := json.Marshal(body)
+		if err != nil {
+			return []byte{}, err
+		}
+		return payload, nil
+	case strings.Contains(m.ModelID, "mistral"):
+		// handle the default being higher than the model allows
+		if m.TopK > 200 {
+			m.TopK = 200
+		}
+
+		body := models.MistralRequest{
+			Prompt:      message,
+			MaxTokens:   m.MaxTokens,
+			Temperature: m.Temperature,
+			TopP:        m.TopP,
+			TopK:        m.TopK,
+		}
+
 		payload, err := json.Marshal(body)
 		if err != nil {
 			return []byte{}, err
@@ -140,10 +164,19 @@ func (m *AWSModelConfig) processStreamingOutput(output *bedrockruntime.InvokeMod
 		case *types.ResponseStreamMemberChunk:
 			// nested switch case for stream outputs. ugh
 			switch {
+			case strings.Contains(m.ModelID, "sonnet"):
+				var resp models.ClaudeMessagesOutput
+				if err := json.NewDecoder(bytes.NewReader(v.Value.Bytes)).Decode(&resp); err != nil {
+					return combinedResult, err
+				}
+
+				if resp.Delta.Type == "text_delta" {
+					handler(context.Background(), []byte(resp.Delta.Text))
+					combinedResult += resp.Delta.Text
+				}
 			case strings.Contains(m.ModelID, "anthropic"):
 				var resp models.ClaudeModelOutputs
-				err := json.NewDecoder(bytes.NewReader(v.Value.Bytes)).Decode(&resp)
-				if err != nil {
+				if err := json.NewDecoder(bytes.NewReader(v.Value.Bytes)).Decode(&resp); err != nil {
 					return combinedResult, err
 				}
 
@@ -151,13 +184,20 @@ func (m *AWSModelConfig) processStreamingOutput(output *bedrockruntime.InvokeMod
 				combinedResult += resp.Completion
 			case strings.Contains(m.ModelID, "cohere"):
 				var resp models.CommandModelOutput
-				err := json.NewDecoder(bytes.NewReader(v.Value.Bytes)).Decode(&resp)
-				if err != nil {
+				if err := json.NewDecoder(bytes.NewReader(v.Value.Bytes)).Decode(&resp); err != nil {
 					return combinedResult, err
 				}
 
 				handler(context.Background(), []byte(resp.Generations[0].Text))
 				combinedResult += resp.Generations[0].Text
+			case strings.Contains(m.ModelID, "mistral"):
+				var resp models.MistralResponse
+				if err := json.Unmarshal([]byte(string(v.Value.Bytes)), &resp); err != nil {
+					return combinedResult, err
+				}
+
+				handler(context.Background(), []byte(resp.Outputs[0].Text))
+				combinedResult += resp.Outputs[0].Text
 			default:
 				fmt.Println("Unable to determine AWS Model")
 			}
