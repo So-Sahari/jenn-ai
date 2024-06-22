@@ -14,6 +14,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/bedrockruntime/types"
 )
 
+// SupportedModels contains all supported models implemented
+var SupportedModels = []string{"sonnet", "anthropic", "cohere", "mistral"}
+
 // AWSModelConfig contains all settings for AWS Models
 type AWSModelConfig struct {
 	ModelID     string  // ModelID is the ID of the model to invoke
