@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"strings"
 
 	"jenn-ai/internal/fuzzy"
 
 	"github.com/aws/aws-sdk-go-v2/service/bedrock"
+	"github.com/aws/aws-sdk-go-v2/service/bedrock/types"
 )
 
 // FoundationModel contains model fields
@@ -38,17 +40,28 @@ func SelectBedrockModel(ctx context.Context, client *bedrock.Client) (string, er
 func ListModels(ctx context.Context, api ClientAPI) ([]FoundationModel, error) {
 	var output []FoundationModel
 
-	response, err := api.ListFoundationModels(ctx, &bedrock.ListFoundationModelsInput{})
+	response, err := api.ListFoundationModels(ctx, &bedrock.ListFoundationModelsInput{
+		ByOutputModality: types.ModelModalityText,
+	})
 	if err != nil {
 		return output, err
 	}
 
+	filteredModels := []types.FoundationModelSummary{}
 	for _, model := range response.ModelSummaries {
+		for _, m := range SupportedModels {
+			if strings.Contains(*model.ModelId, m) {
+				filteredModels = append(filteredModels, model)
+			}
+		}
+	}
+
+	for _, sm := range filteredModels {
 		output = append(output, FoundationModel{
-			Name:     *model.ModelName,
-			Provider: *model.ProviderName,
-			ID:       *model.ModelId,
-			Modality: fmt.Sprintf("%v", model.OutputModalities),
+			Name:     *sm.ModelName,
+			Provider: *sm.ProviderName,
+			ID:       *sm.ModelId,
+			Modality: fmt.Sprintf("%v", sm.OutputModalities),
 		})
 	}
 	return output, nil
