@@ -49,7 +49,11 @@ func init() {
 
 func invokeOllamaModel(ctx context.Context) {
 	if model == "" {
-		model = o.SelectOllamaModel()
+		var err error
+		model, err = o.SelectOllamaModel(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	var chatMessages string
