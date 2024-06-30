@@ -6,10 +6,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"strings"
 
 	"jenn-ai/internal/bedrock"
 	"jenn-ai/internal/ollama"
+	"jenn-ai/internal/parser"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,13 +32,15 @@ func (mc *ModelConfig) runModel(ctx context.Context, region string) gin.HandlerF
 			}
 			completion = input + response
 
-			processPrompt := strings.ReplaceAll(message, "\n", "<br>")
-			processPrompt = strings.ReplaceAll(processPrompt, "    ", `<span class="tab-space"></span>`)
-			processResponse := strings.ReplaceAll(response, "\n", "<br>")
-			processResponse = strings.ReplaceAll(processResponse, "    ", `<span class="tab-space"></span>`)
+			// parse markdown
+			parsed, err := parser.ParseMD(response)
+			if err != nil {
+				log.Fatal(err)
+			}
+
 			c.HTML(http.StatusOK, "chat.html", gin.H{
-				"Human":    template.HTML("<b>You:</b><br>" + processPrompt),
-				"Response": template.HTML("<b>JennAI:</b><br>" + processResponse),
+				"Human":    template.HTML("<b>You:</b><br>" + message),
+				"Response": template.HTML("<b>JennAI:</b><br>" + parsed),
 			})
 		case "Ollama":
 			model := ollama.NewModel(modelID, mc.Temperature, mc.TopP, mc.TopK, mc.MaxTokens)
@@ -49,13 +51,15 @@ func (mc *ModelConfig) runModel(ctx context.Context, region string) gin.HandlerF
 			}
 			completion = input + response
 
-			processPrompt := strings.ReplaceAll(message, "\n", "<br>")
-			processPrompt = strings.ReplaceAll(processPrompt, "    ", `<span class="tab-space"></span>`)
-			processResponse := strings.ReplaceAll(response, "\n", "<br>")
-			processResponse = strings.ReplaceAll(processResponse, "    ", `<span class="tab-space"></span>`)
+			// parse markdown
+			parsed, err := parser.ParseMD(response)
+			if err != nil {
+				log.Fatal(err)
+			}
+
 			c.HTML(http.StatusOK, "chat.html", gin.H{
-				"Human":    template.HTML("<b>You:</b><br>" + processPrompt),
-				"Response": template.HTML("<b>JennAI:</b><br>" + processResponse),
+				"Human":    template.HTML("<b>You:</b><br>" + message),
+				"Response": template.HTML("<b>JennAI:</b><br>" + parsed),
 			})
 		default:
 			fmt.Println("No Model Platform selected or unsupported")
