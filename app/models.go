@@ -33,7 +33,11 @@ func getModelsByPlatform(ctx context.Context, region string) gin.HandlerFunc {
 				modelList = append(modelList, v.ID)
 			}
 		case "Ollama":
-			for _, n := range ollama.OllamaModels {
+			ollamaModels, err := ollama.ListModels(ctx)
+			if err != nil {
+				log.Fatal("Unable to list models")
+			}
+			for _, n := range ollamaModels {
 				modelList = append(modelList, n.ModelID)
 			}
 		default:

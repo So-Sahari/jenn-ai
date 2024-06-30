@@ -2,19 +2,52 @@
 package ollama
 
 import (
+	"context"
 	"fmt"
 	"sort"
 	"strconv"
 
 	"jenn-ai/internal/fuzzy"
+
+	"github.com/ollama/ollama/api"
 )
 
-func SelectOllamaModel() string {
-	return selectModelInput().ModelID
+func SelectOllamaModel(ctx context.Context) (string, error) {
+	models, err := ListModels(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	selectModel, err := selectModelInput(models)
+	if err != nil {
+		return "", err
+	}
+	return selectModel.ModelID, nil
 }
 
-func selectModelInput() OllamaModel {
-	models := OllamaModels
+func ListModels(ctx context.Context) ([]OllamaModel, error) {
+	var models []OllamaModel
+
+	client, err := api.ClientFromEnvironment()
+	if err != nil {
+		return models, err
+	}
+
+	localModels, err := client.List(ctx)
+	if err != nil {
+		return models, err
+	}
+
+	for _, model := range localModels.Models {
+		m := OllamaModel{Name: model.Name, ModelID: model.Model}
+		models = append(models, m)
+	}
+	return models, nil
+}
+
+func selectModelInput(models []OllamaModel) (OllamaModel, error) {
+	var modelInfo OllamaModel
+
 	selector := fuzzy.Prompter{}
 	sortedModels := sortModelInputs(models)
 
@@ -22,8 +55,8 @@ func selectModelInput() OllamaModel {
 	linePrefix := "#"
 
 	for i, info := range sortedModels {
-		modelInfo := fmt.Sprintf("Name: %s | ModelID: %s ", info.Name, info.ModelID)
-		modelsToSelect = append(modelsToSelect, linePrefix+strconv.Itoa(i)+" "+modelInfo)
+		models := fmt.Sprintf("Name: %s | ModelID: %s ", info.Name, info.ModelID)
+		modelsToSelect = append(modelsToSelect, linePrefix+strconv.Itoa(i)+" "+models)
 	}
 
 	label := "Select your model"
@@ -31,11 +64,11 @@ func selectModelInput() OllamaModel {
 
 	fmt.Println()
 
-	modelInfo := sortedModels[indexChoice]
+	modelInfo = sortedModels[indexChoice]
 
 	fmt.Printf("Selected model: %s - %s", modelInfo.Name, modelInfo.ModelID)
 	fmt.Println()
-	return modelInfo
+	return modelInfo, nil
 }
 
 func sortModelInputs(models []OllamaModel) []OllamaModel {
