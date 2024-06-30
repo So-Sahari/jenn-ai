@@ -14,13 +14,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-
-    <style>
-    .tab-space {
-        display: inline-block;
-        margin-left: 2em;
-    }
-    </style>
   </head>
   <body class="bg-gray-900">
     <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4">
@@ -30,16 +23,9 @@
       </div>
     </div>
 
-    <div id="htmlOutput" class="pl-40 pr-40 mb-20">
+    <div id="htmlOutput" class="flex flex-col flex-grow pl-40 pr-40 mb-20">
       {{template "chat.html" .}}
     </div>
-    <script>
-      document.addEventListener('htmx:afterSwap', function(evt) {
-        if (evt.detail.target.id === 'htmlOutput') {
-            evt.detail.target.scrollIntoView(false); // Scroll to the bottom of the element
-        }
-      });
-    </script>
   </body>
   <div class="pl-40 pr-40">
     {{template "prompt.html" .}}

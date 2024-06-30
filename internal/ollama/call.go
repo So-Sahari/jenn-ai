@@ -49,6 +49,5 @@ func (m *OllamaModelConfig) CallModel(ctx context.Context, message string) (stri
 	}
 	fmt.Println()
 
-	// return fmt.Sprintf("%q", completion), nil
 	return completion, nil
 }
