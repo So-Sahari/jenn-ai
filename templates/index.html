@@ -30,12 +30,19 @@
       </div>
     </div>
 
-    <div class="pl-40 pr-40 mb-20">
+    <div id="htmlOutput" class="pl-40 pr-40 mb-20">
       {{template "chat.html" .}}
     </div>
-    <div class="pl-40 pr-40">
-      {{template "prompt.html" .}}
-    </div>
+    <script>
+      document.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'htmlOutput') {
+            evt.detail.target.scrollIntoView(false); // Scroll to the bottom of the element
+        }
+      });
+    </script>
   </body>
+  <div class="pl-40 pr-40">
+    {{template "prompt.html" .}}
+  </div>
 </html>
 {{end}}
