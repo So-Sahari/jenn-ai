@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.0](https://github.com/So-Sahari/jenn-ai/compare/v1.1.0...v1.2.0) (2024-07-01)
+
+
+### Features
+
+* add docker support ([ad73310](https://github.com/So-Sahari/jenn-ai/commit/ad73310711fe0e6056291ce92f4518ce01841f91))
+* add markdown parser ([880d745](https://github.com/So-Sahari/jenn-ai/commit/880d74579cba7ff4786f73e12f512abc9493c617))
+* cleanup and add style to chat ([d8a17c7](https://github.com/So-Sahari/jenn-ai/commit/d8a17c7b8d8ffc2413d2666ef9f3f146d4148978))
+* limit list models to supported model structs ([50d184d](https://github.com/So-Sahari/jenn-ai/commit/50d184d750b72194d05f1bafcd97cdc29e7c731c))
+* ollama now list models available ([9976eaf](https://github.com/So-Sahari/jenn-ai/commit/9976eaf9983535673c9e4cf157329c8860d1ec09))
+
 ## [1.1.0](https://github.com/So-Sahari/jenn-ai/compare/v1.0.0...v1.1.0) (2024-03-12)
 
 
