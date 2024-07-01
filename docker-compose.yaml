@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+  jenn_ai_dev:
+    container_name: jenn_ai_dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    user: 1000:1000
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    depends_on:
+      - ollama
+    ports:
+      - 3000:31000
+    networks:
+      - ollama
+    volumes:
+      - ./:/app
+      #   # mount aws credentials for bedrock
+      #   - ~/.aws:/tmp/.aws
+
+  jenn_ai:
+    container_name: jenn_ai
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: 1000:1000
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    depends_on:
+      - ollama
+    ports:
+      - 31000:31000
+    networks:
+      - ollama
+    # volumes:
+    #   # mount aws credentials for bedrock
+    #   - ~/.aws:/tmp/.aws
+
+  ollama:
+    container_name: ollama 
+    image: ollama/ollama
+    healthcheck:
+      test: ollama --version || exit 1
+    command: serve
+    networks:
+      - ollama
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  ollama:
+
+networks:
+  ollama:
+    name: ollama_default
+    external: false
