@@ -1,33 +1,25 @@
 {{define "chat.html"}}
-<div 
-  id="messages"
-  class="flex flex-col flex-grow overflow-y-auto printout-wrapper border-0 text-gray-100 p-4"
->
   {{ if not (eq .Human nil) }}
-  <div class="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-    <div>
-      <div class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-        <p class="text-sm">{{.Human}}</p>
+  <div class="chat chat-start">
+    <div class="chat-image avatar">
+      <div class="w-10 rounded-full">
+        <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=Jasmine" />
       </div>
     </div>
-    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-      <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=Jasmine" />
-    </div>
+    <div class="chat-header">You</div>
+    <div class="chat-bubble">{{.Human}}</div>
   </div>
   {{ end }}
   {{ if not (eq .Response nil) }}
-  <div class="flex w-full mt-2 space-x-3 max-w-xs">
-    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-      <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Leo" />
-    </div>
-    <div>
-      <div class="bg-gray-700 p-3 rounded-r-lg rounded-bl-lg">
-        <p class="text-sm">
-          {{.Response}}
-        </p>
+  <div class="chat chat-end">
+    <div class="chat-image avatar">
+      <div class="w-10 rounded-full">
+        <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Leo" />
       </div>
     </div>
+    <div class="chat-header">JennAI</div>
+    <div class="chat-bubble">{{.Response}}</div>
+    <div class="chat-footer opacity-50">{{.Platform}} - {{.Model}}</div>
   </div>
   {{ end }}
-</div>
 {{end}}

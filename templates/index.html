@@ -1,6 +1,6 @@
 {{define "index.html"}}
 <!DOCTYPE html>
-<html lang="en">
+<html data-theme="dracula" lang="en">
   <head>
     <title>JennAI</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
@@ -16,33 +16,57 @@
       referrerpolicy="no-referrer"
     />
   </head>
-  <body class="bg-gray-900">
-    <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4">
+  <body>
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <div class="w-64 bg-gray-900 p-4 flex flex-col">
+        <div class="text-white text-xl mb-4">{{.Message}}</div>
+        <!-- sidebar content here -->
+        <!-- <ul> -->
+        <!--   <li class="mb-2"><a href="#" class="text-gray-300 hover:text-white">Link 1</a></li> -->
+        <!--   <li class="mb-2"><a href="#" class="text-gray-300 hover:text-white">Link 2</a></li> -->
+        <!--   <li class="mb-2"><a href="#" class="text-gray-300 hover:text-white">Link 3</a></li> -->
+        <!-- </ul> -->
+      </div>
+
+      <!-- Main content -->
+      <div class="flex flex-col flex-grow text-gray-900 dark:text-gray-100 p-4">
+
+        <!-- Card divided area -->
         <div class="flex w-full">
-          <div class="card bg-base-300 rounded-box grid h-20 flex-grow place-items-center">
-            <p style="font-size: 24px; text-align: center;">{{.Message}}</p>
+          <!-- Left Card -->
+          <div class="card rounded-box grid h-20 flex-grow place-items-center">
             <div class="pl-40">
               {{template "dropdowns.html" .}}
             </div>
           </div>
-          <div class="card bg-base-300 rounded-box grid h-20 flex-grow place-items-center">
+
+          <!-- Right Card -->
+          <div class="card rounded-box grid h-20 flex-grow place-items-center">
             <label class="flex cursor-pointer gap-2">
               <span class="label-text">Current</span>
-              <input type="checkbox" value="synthwave" class="toggle theme-controller" />
-              <span class="label-text">Synthwave</span>
+              <input type="checkbox" value="coffee" class="toggle theme-controller" />
+              <span class="label-text">Coffee</span>
             </label>
           </div>
         </div>
+
+        <!-- Messages -->
+        <div id="htmlOutput" class="flex flex-col flex-grow pl-40 pr-40 mb-20">
+          <div 
+            id="messages"
+            class="flex flex-col flex-grow overflow-y-auto border-0 text-gray-100 mb-20"
+            style="max-height: calc(100vh - 200px);"
+          >
+            {{template "chat.html" .}}
+          </div>
+        </div>
+
+        <!-- Prompt -->
+        <div class="fixed inset-x-0 bottom-0 pb-4">
+          {{template "prompt.html" .}}
+        </div>
       </div>
-
-    </div>
-
-    <div id="htmlOutput" class="flex flex-col flex-grow pl-40 pr-40 mb-20">
-      {{template "chat.html" .}}
-    </div>
   </body>
-  <div class="pl-40 pr-40">
-    {{template "prompt.html" .}}
-  </div>
 </html>
 {{end}}

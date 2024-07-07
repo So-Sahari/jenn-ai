@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 
 	"jenn-ai/internal/bedrock"
 	"jenn-ai/internal/ollama"
@@ -43,9 +44,13 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 				log.Fatal(err)
 			}
 
+			parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='mockup-code bg-gray-900'><pre>")
+			parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div>")
 			c.HTML(http.StatusOK, "chat.html", gin.H{
-				"Human":    template.HTML("<b>You:</b><br>" + message),
-				"Response": template.HTML("<b>JennAI:</b><br>" + parsed),
+				"Human":    template.HTML(message),
+				"Response": template.HTML(parsed),
+				"Platform": platform,
+				"Model":    modelID,
 			})
 		case "Ollama":
 			model := ollama.NewModel(modelID, mc.Temperature, mc.TopP, mc.TopK, mc.MaxTokens)
@@ -62,9 +67,13 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 				log.Fatal(err)
 			}
 
+			parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='mockup-code bg-gray-900'><pre>")
+			parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div>")
 			c.HTML(http.StatusOK, "chat.html", gin.H{
-				"Human":    template.HTML("<b>You:</b><br>" + message),
-				"Response": template.HTML("<b>JennAI:</b><br>" + parsed),
+				"Human":    template.HTML(message),
+				"Response": template.HTML(parsed),
+				"Platform": platform,
+				"Model":    modelID,
 			})
 		default:
 			fmt.Println("No Model Platform selected or unsupported")
