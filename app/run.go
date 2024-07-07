@@ -44,8 +44,8 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 				log.Fatal(err)
 			}
 
-			parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='mockup-code bg-gray-900'><pre>")
-			parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div>")
+			parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body'><pre>")
+			parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div></div>")
 			c.HTML(http.StatusOK, "chat.html", gin.H{
 				"Human":    template.HTML(message),
 				"Response": template.HTML(parsed),
@@ -67,8 +67,8 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 				log.Fatal(err)
 			}
 
-			parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='mockup-code bg-gray-900'><pre>")
-			parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div>")
+			parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body'><pre>")
+			parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div></div>")
 			c.HTML(http.StatusOK, "chat.html", gin.H{
 				"Human":    template.HTML(message),
 				"Response": template.HTML(parsed),
