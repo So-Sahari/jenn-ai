@@ -10,13 +10,18 @@ import (
 	"jenn-ai/internal/bedrock"
 	"jenn-ai/internal/ollama"
 	"jenn-ai/internal/parser"
+	"jenn-ai/internal/state"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (mc *ModelConfig) runModel(ctx context.Context, region string) gin.HandlerFunc {
+func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		appState := state.GetState()
+		platform := appState.GetPlatform()
+		modelID := appState.GetModel()
 		message := c.PostForm("prompt")
+
 		switch platform {
 		case "Bedrock":
 			brClient, err := bedrock.CreateBedrockruntimeClient(ctx, mc.Region)

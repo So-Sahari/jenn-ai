@@ -1,64 +1,41 @@
 {{define "dropdowns.html"}}
-<div class="flex justify-left">
-  <div class="pr-2">
-    <button 
-      id="platform-trigger"
+<div class="flex flex-row items-center space-x-4">
+  <form id="platform-model-form"
+    class="flex-grow flex flex-row space-x-2"
+    hx-post="/select-model"
+    hx-trigger="change from:#model-select"
+    hx-target="#current-state"
+  >
+    <select 
+      name="platform-option" 
+      class="select select-ghost w-full max-w-xs"
       hx-get="/model-platform"
-      hx-trigger="click"
-      hx-target="#platform-container"
-      class="bg-blue-500 hover:bg-blue-700 py-2 px-2 rounded"
-    >Model Platform</button>
-    <div 
-      id="platform-container"
-      class="hidden mt-2 py-2 w-48 bg-black rounded-md shadow-xl z-20"
-    ></div>
-  </div>
-  <div class="pr-2">
-    <button 
-      id="model-trigger"
+      hx-trigger="load"
+      hx-target="this"
+      hx-on::after-request="htmx.trigger('#model-select', 'reset')"
+    >
+      <option disabled selected value="">Model Platform</option>
+    </select>
+
+    <select 
+      id="model-select"
+      name="model-option" 
+      class="select select-ghost w-full max-w-xs"
       hx-get="/model"
-      hx-trigger="click"
-      hx-target="#model-container"
-      class="bg-blue-500 hover:bg-blue-700 py-2 px-2 rounded"
-    >Model</button>
-    <div 
-      id="model-container"
-      class="hidden mt-2 py-2 w-48 bg-black rounded-md shadow-xl z-20"
-    ></div>
+      hx-trigger="reset, change from:select[name='platform-option']"
+      hx-target="this"
+      hx-include="[name='platform-option']"
+    >
+      <option disabled selected value="">Select Model</option>
+    </select>
+  </form>
+  <div 
+    id="current-state"
+    hx-get="/current-state"
+    hx-trigger="load, every 5s"
+    class="badge badge-accent badge-outline"
+  >
+    <!-- This will be populated with the current state -->
   </div>
-  <div id="selected-platform" class="mt-2 p-2"></div>
-  <div id="selected-model" class="mt-2 p-2"></div>
 </div>
-
-<script>
-const container = document.getElementById('platform-container');
-const selectedItemPlaceholder = document.getElementById('selected-platform');
-const modelContainer = document.getElementById('model-container');
-const selectedModel = document.getElementById('selected-model');
-
-document.addEventListener('click', function (e) {
-  if (e.target.matches('#platform-trigger')) {
-    // Toggle dropdown visibility
-    container.classList.toggle('hidden');
-  }
-  if (e.target.matches('.platform-item')) {
-    const selection = e.target.getAttribute('data-value');
-    selectedItemPlaceholder.textContent = `${selection}:`;
-    // Toggle dropdown visibility
-    container.classList.toggle('hidden');
-    e.preventDefault();
-  }
-  if (e.target.matches('#model-trigger')) {
-    // Toggle dropdown visibility
-    modelContainer.classList.toggle('hidden');
-  }
-  if (e.target.matches('.model-item')) {
-    const selection = e.target.getAttribute('data-value');
-    selectedModel.textContent = `${selection}`;
-    // Toggle dropdown visibility
-    modelContainer.classList.toggle('hidden');
-    e.preventDefault();
-  }
-});
-</script>
 {{end}}

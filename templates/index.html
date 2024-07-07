@@ -3,6 +3,7 @@
 <html lang="en">
   <head>
     <title>JennAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.7"
       integrity="sha384-EAzY246d6BpbWR7sQ8+WEm40J8c3dHFsqC58IgPlh4kMbRRI6P6WA+LA/qGAyAu8"
@@ -17,10 +18,23 @@
   </head>
   <body class="bg-gray-900">
     <div class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4">
-      <p style="font-size: 24px; text-align: center;">{{.Message}}</p>
-      <div class="pl-40">
-        {{template "dropdowns.html" .}}
+        <div class="flex w-full">
+          <div class="card bg-base-300 rounded-box grid h-20 flex-grow place-items-center">
+            <p style="font-size: 24px; text-align: center;">{{.Message}}</p>
+            <div class="pl-40">
+              {{template "dropdowns.html" .}}
+            </div>
+          </div>
+          <div class="card bg-base-300 rounded-box grid h-20 flex-grow place-items-center">
+            <label class="flex cursor-pointer gap-2">
+              <span class="label-text">Current</span>
+              <input type="checkbox" value="synthwave" class="toggle theme-controller" />
+              <span class="label-text">Synthwave</span>
+            </label>
+          </div>
+        </div>
       </div>
+
     </div>
 
     <div id="htmlOutput" class="flex flex-col flex-grow pl-40 pr-40 mb-20">

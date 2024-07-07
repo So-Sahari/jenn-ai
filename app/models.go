@@ -8,16 +8,20 @@ import (
 
 	"jenn-ai/internal/bedrock"
 	"jenn-ai/internal/ollama"
+	"jenn-ai/internal/state"
 
 	"github.com/gin-gonic/gin"
 )
 
-var modelID string
-
 func getModelsByPlatform(ctx context.Context, region string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		platform := c.Query("platform-option")
+		appState := state.GetState()
+		appState.SetPlatform(platform)
+
 		var models string
 		var modelList []string
+
 		switch platform {
 		case "Bedrock":
 			client, err := bedrock.CreateBedrockClient(ctx, region)
@@ -43,19 +47,17 @@ func getModelsByPlatform(ctx context.Context, region string) gin.HandlerFunc {
 		default:
 			fmt.Println("No Model Platform selected")
 		}
+
+		models = "<option disabled selected>Select Model</option>"
 		for _, m := range modelList {
-			models += fmt.Sprintf(`<a href="#" 
-      data-value="%s"
-      hx-post="/select-model?option=%s" 
-      class="model-item block px-4 py-2 text-sm text-black-700 hover:bg-blue-400">
-      %s</a>`, m, m, m)
+			models += fmt.Sprintf("<option>%s</option>", m)
 		}
 		c.Data(http.StatusOK, "text/html", []byte(models))
 	}
 }
 
 func selectModel(c *gin.Context) {
-	selectedOption := c.Query("option")
-	fmt.Printf("Received the following: %s\n", selectedOption)
-	modelID = selectedOption
+	model := c.PostForm("model-option")
+	appState := state.GetState()
+	appState.SetModel(model)
 }

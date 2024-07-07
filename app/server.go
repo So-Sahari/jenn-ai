@@ -40,11 +40,11 @@ func (mc *ModelConfig) Serve(ctx context.Context) {
 	router.LoadHTMLGlob("templates/*")
 
 	router.GET("/", renderIndex)
+	router.GET("/current-state", getCurrentState)
 	router.GET("/model-platform", getModelPlatform)
-	router.POST("/select-platform", setModelPlatform)
 	router.GET("/model", getModelsByPlatform(ctx, mc.Region))
 	router.POST("/select-model", selectModel)
-	router.POST("/run", mc.runModel(ctx, mc.Region))
+	router.POST("/run", mc.runModel(ctx))
 
 	if err := router.Run(":31000"); err != nil {
 		log.Fatal(err)
