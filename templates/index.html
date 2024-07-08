@@ -17,16 +17,26 @@
     />
   </head>
   <body>
+    <script>
+      document.addEventListener('htmx:afterSwap', function(event) {
+        if (event.detail.elt.id === 'messages') {
+          scrollToBottom();
+        }
+      });
+
+      function scrollToBottom() {
+        var messagesDiv = document.getElementById('messages');
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+    </script>
+
     <div class="flex h-screen">
       <!-- Sidebar -->
-      <div class="w-64 bg-gray-900 p-4 flex flex-col">
+      <div class="w-64 bg-gray-900 p-4 flex flex-col" hx-get="/messages" hx-trigger="load" hx-target="#sidebar-messages" hx-swap="innerHTML">
         <div class="text-white text-xl mb-4">{{.Message}}</div>
-        <!-- sidebar content here -->
-        <!-- <ul> -->
-        <!--   <li class="mb-2"><a href="#" class="text-gray-300 hover:text-white">Link 1</a></li> -->
-        <!--   <li class="mb-2"><a href="#" class="text-gray-300 hover:text-white">Link 2</a></li> -->
-        <!--   <li class="mb-2"><a href="#" class="text-gray-300 hover:text-white">Link 3</a></li> -->
-        <!-- </ul> -->
+        <div id="sidebar-messages">
+          <!-- Messages will be loaded here -->
+        </div>
       </div>
 
       <!-- Main content -->

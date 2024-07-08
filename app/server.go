@@ -38,9 +38,13 @@ func NewModelConfig(platform, modelID, region string, temp, topP float64, topK, 
 func (mc *ModelConfig) Serve(ctx context.Context) {
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
+	initDB()
+	defer db.Close()
 
 	router.GET("/", renderIndex)
 	router.GET("/current-state", getCurrentState)
+	router.GET("/messages", getAllMessagesFromDB)
+	router.GET("/message/:id/render", getMessagesFromDB)
 	router.GET("/model-platform", getModelPlatform)
 	router.GET("/model", getModelsByPlatform(ctx, mc.Region))
 	router.POST("/select-model", selectModel)

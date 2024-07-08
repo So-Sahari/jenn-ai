@@ -1,0 +1,11 @@
+{{define "sidebar.html"}}
+<ul>
+  {{range .Conversations}}
+  <li class="mb-2 text-gray-300 hover:text-white">
+    <a href="#" hx-get="/message/{{.ID}}/render" hx-target="#messages" hx-swap="innerHTML">
+      {{if gt (len .LatestHuman) 25}}{{slice .LatestHuman 0 25}}...{{else}}{{.LatestHuman}}{{end}}
+    </a>
+  </li>
+  {{end}}
+</ul>
+{{end}}

@@ -1,25 +1,27 @@
 {{define "chat.html"}}
-  {{ if not (eq .Human nil) }}
-  <div class="chat chat-start">
-    <div class="chat-image avatar">
-      <div class="w-10 rounded-full">
-        <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=Jasmine" />
+  {{range .ChatMessages}}
+    {{if .Human}}
+    <div class="chat chat-start">
+      <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+          <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=Jasmine" />
+        </div>
       </div>
+      <div class="chat-header">You</div>
+      <div class="chat-bubble">{{.Human}}</div>
     </div>
-    <div class="chat-header">You</div>
-    <div class="chat-bubble">{{.Human}}</div>
-  </div>
-  {{ end }}
-  {{ if not (eq .Response nil) }}
-  <div class="chat chat-end">
-    <div class="chat-image avatar">
-      <div class="w-10 rounded-full">
-        <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Leo" />
+    {{end}}
+    {{if .Response}}
+    <div class="chat chat-end">
+      <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+          <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Leo" />
+        </div>
       </div>
+      <div class="chat-header">JennAI</div>
+      <div class="chat-bubble">{{.Response}}</div>
+      <div class="chat-footer opacity-50">{{.Platform}} - {{.Model}}</div>
     </div>
-    <div class="chat-header">JennAI</div>
-    <div class="chat-bubble">{{.Response}}</div>
-    <div class="chat-footer opacity-50">{{.Platform}} - {{.Model}}</div>
-  </div>
-  {{ end }}
+    {{end}}
+  {{end}}
 {{end}}
