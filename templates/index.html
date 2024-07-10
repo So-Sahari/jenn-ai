@@ -32,8 +32,25 @@
 
     <div class="flex h-screen">
       <!-- Sidebar -->
-      <div class="w-64 bg-gray-900 p-4 flex flex-col" hx-get="/messages" hx-trigger="load" hx-target="#sidebar-messages" hx-swap="innerHTML">
-        <div class="text-white text-xl mb-4">{{.Message}}</div>
+      <div 
+        class="w-64 bg-gray-900 p-4 flex flex-col h-screen" 
+        hx-get="/messages" 
+        hx-trigger="load" 
+        hx-target="#sidebar-messages" 
+        hx-swap="innerHTML"
+      >
+        <div class="flex justify-between items-center text-white text-xl mb-4 space-x-4">
+          <span>{{.Message}}</span>
+          <button 
+            class="btn btn-square btn-outline right-4"
+            hx-post="/new-conversation"
+            hx-trigger="click"
+            hx-target="#messages"
+            hx-swap="innerHTML"
+          >
+            <i class="fa-regular fa-comment-dots"></i>
+          </button>
+        </div>
         <div id="sidebar-messages">
           <!-- Messages will be loaded here -->
         </div>
@@ -53,11 +70,13 @@
 
           <!-- Right Card -->
           <div class="card rounded-box grid h-20 flex-grow place-items-center">
-            <label class="flex cursor-pointer gap-2">
-              <span class="label-text">Current</span>
-              <input type="checkbox" value="coffee" class="toggle theme-controller" />
-              <span class="label-text">Coffee</span>
-            </label>
+            <div class="flex flex-row items-center space-x-4">
+              <label class="flex cursor-pointer gap-2">
+                <span class="label-text">Current</span>
+                <input type="checkbox" value="coffee" class="toggle theme-controller" />
+                <span class="label-text">Coffee</span>
+              </label>
+            </div>
           </div>
         </div>
 

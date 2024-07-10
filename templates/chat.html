@@ -1,25 +1,25 @@
 {{define "chat.html"}}
   {{range .ChatMessages}}
     {{if .Human}}
-    <div class="chat chat-start">
+    <div class="chat chat-start max-w-3xl w-full mb-4 p-4">
       <div class="chat-image avatar">
         <div class="w-10 rounded-full">
           <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=Jasmine" />
         </div>
       </div>
       <div class="chat-header">You</div>
-      <div class="chat-bubble">{{.Human}}</div>
+      <div class="chat-bubble" style="max-width: 100%; word-break: break-word;">{{.Human}}</div>
     </div>
     {{end}}
     {{if .Response}}
-    <div class="chat chat-end">
+    <div class="chat chat-end max-w-3xl w-full mb-4 p-4">
       <div class="chat-image avatar">
         <div class="w-10 rounded-full">
           <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Leo" />
         </div>
       </div>
       <div class="chat-header">JennAI</div>
-      <div class="chat-bubble">{{.Response}}</div>
+      <div class="chat-bubble" style="max-width: 100%; word-break: break-word;">{{.Response}}</div>
       <div class="chat-footer opacity-50">{{.Platform}} - {{.Model}}</div>
     </div>
     {{end}}

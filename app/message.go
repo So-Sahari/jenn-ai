@@ -20,6 +20,23 @@ type ChatMessage struct {
 	Model    string
 }
 
+func createConversation(c *gin.Context) {
+	conversationID, err := createNewConversation()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create a new conversation"})
+		return
+	}
+
+	appState := state.GetState()
+	appState.SetConversationID(conversationID)
+
+	c.HTML(http.StatusOK, "chat.html", gin.H{
+		"ChatMessages": []ChatMessage{},
+		"Platform":     appState.GetPlatform(),
+		"Model":        appState.GetModel(),
+	})
+}
+
 func getMessagesFromDB(c *gin.Context) {
 	conversationID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -50,7 +67,7 @@ func getMessagesFromDB(c *gin.Context) {
 			return
 		}
 
-		parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body'><pre>")
+		parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body overflow-x-auto'><pre>")
 		parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div></div>")
 
 		chatMessages = append(chatMessages, ChatMessage{
@@ -67,6 +84,18 @@ func getMessagesFromDB(c *gin.Context) {
 }
 
 func getAllMessagesFromDB(c *gin.Context) {
+	conversations, err := getAllConversations()
+	if err != nil {
+		log.Print(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.HTML(http.StatusOK, "sidebar.html", gin.H{
+		"Conversations": conversations,
+	})
+}
+
+func getAllConversationsHandler(c *gin.Context) {
 	conversations, err := getAllConversations()
 	if err != nil {
 		log.Print(err)

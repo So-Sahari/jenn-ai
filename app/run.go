@@ -83,21 +83,43 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 			return
 		}
 
-		// parse markdown
-		parsed, err := parser.ParseMD(response)
+		// Retrieve all messages again to update the chat window
+		messages, err := getMessagesByConversationID(conversationID)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve messages"})
 			return
 		}
 
-		parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body'><pre>")
-		parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div></div>")
-		c.HTML(http.StatusOK, "chat.html", gin.H{
-			"Human":          template.HTML(message),
-			"Response":       template.HTML(parsed),
-			"Platform":       platform,
-			"Model":          modelID,
-			"ConversationID": conversationID,
+		var chatMessages []ChatMessage
+		for _, msg := range messages {
+			parsedHuman, _ := parser.ParseMD(msg.Human)
+			parsedResponse, _ := parser.ParseMD(msg.Response)
+			parsedResponse = strings.ReplaceAll(parsedResponse, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body overflow-x-auto'><pre>")
+			parsedResponse = strings.ReplaceAll(parsedResponse, "</pre>", "</pre></div></div>")
+			chatMessages = append(chatMessages, ChatMessage{
+				Human:    template.HTML(parsedHuman),
+				Response: template.HTML(parsedResponse),
+				Platform: msg.Platform,
+				Model:    msg.Model,
+			})
+		}
+
+		// Fetch updated list of conversations
+		conversations, err := getAllConversations()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve conversations"})
+			return
+		}
+
+		c.HTML(http.StatusOK, "sidebar.html", gin.H{
+			"Conversations": conversations,
 		})
+
+		c.HTML(http.StatusOK, "chat.html", gin.H{
+			"ChatMessages": chatMessages,
+			"Platform":     platform,
+			"Model":        modelID,
+		})
+
 	}
 }

@@ -49,7 +49,11 @@ func insertMessage(conversationID int, human, response, platform, model string) 
 }
 
 func getMessagesByConversationID(conversationID int) ([]Message, error) {
-	rows, err := db.Query("SELECT id, conversation_id, human, response, platform, model FROM messages WHERE conversation_id = ?", conversationID)
+	rows, err := db.Query(`
+		SELECT id, conversation_id, COALESCE(human, ''), COALESCE(response, ''), platform, model 
+		FROM messages 
+		WHERE conversation_id = ? 
+		ORDER BY id ASC`, conversationID)
 	if err != nil {
 		return nil, err
 	}
@@ -59,6 +63,7 @@ func getMessagesByConversationID(conversationID int) ([]Message, error) {
 	for rows.Next() {
 		var msg Message
 		if err := rows.Scan(&msg.ID, &msg.ConversationID, &msg.Human, &msg.Response, &msg.Platform, &msg.Model); err != nil {
+			log.Printf("Error scanning row: %v", err)
 			return nil, err
 		}
 		messages = append(messages, msg)
@@ -67,8 +72,8 @@ func getMessagesByConversationID(conversationID int) ([]Message, error) {
 }
 
 func getAllConversations() ([]Conversation, error) {
-	query := `
-		SELECT c.id, m.human, m.response
+	rows, err := db.Query(`
+		SELECT c.id, COALESCE(m.human, ''), COALESCE(m.response, '')
 		FROM conversations c
 		LEFT JOIN messages m ON m.id = (
 			SELECT id FROM messages
@@ -77,10 +82,9 @@ func getAllConversations() ([]Conversation, error) {
 			LIMIT 1
 		)
 		ORDER BY c.id
-	`
-	rows, err := db.Query(query)
+	`)
 	if err != nil {
-		log.Printf("Error executing query %s: %v", query, err)
+		log.Printf("Error executing query: %v", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -93,10 +97,6 @@ func getAllConversations() ([]Conversation, error) {
 			return nil, err
 		}
 		conversations = append(conversations, conv)
-	}
-	if err = rows.Err(); err != nil {
-		log.Printf("Error iterating over rows: %v", err)
-		return nil, err
 	}
 	return conversations, nil
 }

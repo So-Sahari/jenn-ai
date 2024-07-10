@@ -49,6 +49,7 @@ func (mc *ModelConfig) Serve(ctx context.Context) {
 	router.GET("/model", getModelsByPlatform(ctx, mc.Region))
 	router.POST("/select-model", selectModel)
 	router.POST("/run", mc.runModel(ctx))
+	router.POST("/new-conversation", createConversation)
 
 	if err := router.Run(":31000"); err != nil {
 		log.Fatal(err)
