@@ -67,7 +67,7 @@ func getMessagesFromDB(c *gin.Context) {
 			return
 		}
 
-		parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body overflow-x-auto'><pre>")
+		parsed = strings.ReplaceAll(parsed, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body text-white'><pre>")
 		parsed = strings.ReplaceAll(parsed, "</pre>", "</pre></div></div>")
 
 		chatMessages = append(chatMessages, ChatMessage{

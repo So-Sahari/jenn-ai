@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="chat-header">You</div>
-      <div class="chat-bubble" style="max-width: 100%; word-break: break-word;">{{.Human}}</div>
+      <div class="chat-bubble chat-bubble-accent" style="max-width: 100%; word-break: break-word;">{{.Human}}</div>
     </div>
     {{end}}
     {{if .Response}}
@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="chat-header">JennAI</div>
-      <div class="chat-bubble" style="max-width: 100%; word-break: break-word;">{{.Response}}</div>
+      <div class="chat-bubble chat-bubble-secondary" style="max-width: 100%; word-break: break-word;">{{.Response}}</div>
       <div class="chat-footer opacity-50">{{.Platform}} - {{.Model}}</div>
     </div>
     {{end}}

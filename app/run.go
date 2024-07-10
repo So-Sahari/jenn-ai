@@ -94,7 +94,7 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 		for _, msg := range messages {
 			parsedHuman, _ := parser.ParseMD(msg.Human)
 			parsedResponse, _ := parser.ParseMD(msg.Response)
-			parsedResponse = strings.ReplaceAll(parsedResponse, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body overflow-x-auto'><pre>")
+			parsedResponse = strings.ReplaceAll(parsedResponse, "<pre>", "<div class='card bg-base-100 shadow-xl'><div class='card-body text-white'><pre>")
 			parsedResponse = strings.ReplaceAll(parsedResponse, "</pre>", "</pre></div></div>")
 			chatMessages = append(chatMessages, ChatMessage{
 				Human:    template.HTML(parsedHuman),
