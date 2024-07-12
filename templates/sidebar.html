@@ -1,0 +1,32 @@
+{{define "sidebar.html"}}
+<h2 class="menu-title">Chats</h2>
+<ul class="menu bg-base-200 rounded-box w-56">
+  {{range .Conversations}}
+  <li class="flex flex-row justify-between items-center mb-2 text-gray-300 hover:text-white">
+    <a href="#" hx-get="/message/{{.ID}}/render" hx-target="#messages" hx-swap="innerHTML" class="flex-grow truncate">
+      {{if gt (len .LatestHuman) 16}}{{slice .LatestHuman 0 16}}...{{else}}{{.LatestHuman}}{{end}}
+    </a>
+    <button 
+      class="btn btn-square btn-outline ml-2 flex-shrink-0"
+      hx-delete="/conversation/{{.ID}}/delete"
+      hx-target="closest li"
+      hx-swap="outerHTML"
+      style="width: 2rem; height: 2rem; min-width: unset; display: flex; justify-content: center; align-items: center;"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </li>
+  {{end}}
+</ul>
+{{end}}
