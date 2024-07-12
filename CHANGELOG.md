@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0](https://github.com/So-Sahari/jenn-ai/compare/v1.2.0...v1.3.0) (2024-07-12)
+
+
+### Features
+
+* ability to delete chats ([05b9757](https://github.com/So-Sahari/jenn-ai/commit/05b9757b69d9ff5a31ef08b4cd6a27186ea52558))
+* add state check for updates and implement daisyUI ([bcd7005](https://github.com/So-Sahari/jenn-ai/commit/bcd7005c38d54dfc955e13c1be12cf53d2a03fac))
+* create new chat conversations ([1c3e365](https://github.com/So-Sahari/jenn-ai/commit/1c3e365151e3c43c149bf404720005ce8812844e))
+* improve ui and style ([731f929](https://github.com/So-Sahari/jenn-ai/commit/731f92959708f7376258b6ae170be474f34bddc1))
+* refactor more styling and ui changes ([17ebadb](https://github.com/So-Sahari/jenn-ai/commit/17ebadb941e4cbc54b588e6095971506a7db98a2))
+* store and retrieve chat session ([875cf06](https://github.com/So-Sahari/jenn-ai/commit/875cf065a2df7b24cd4721547aaa93ff2e617858))
+
+
+### Bug Fixes
+
+* fix formatting of code blocks ([e57facb](https://github.com/So-Sahari/jenn-ai/commit/e57facbd48994abf0b3824c48c120dff1469b362))
+
 ## [1.2.0](https://github.com/So-Sahari/jenn-ai/compare/v1.1.0...v1.2.0) (2024-07-01)
 
 
