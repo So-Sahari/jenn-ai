@@ -106,3 +106,19 @@ func getAllConversationsHandler(c *gin.Context) {
 		"Conversations": conversations,
 	})
 }
+
+func deleteChat(c *gin.Context) {
+	conversationID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid conversation ID"})
+		return
+	}
+
+	err = deleteConversation(conversationID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete conversation"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "Conversation deleted"})
+}

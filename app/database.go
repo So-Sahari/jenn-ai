@@ -122,6 +122,18 @@ func createNewConversation() (int, error) {
 	return conversationID, nil
 }
 
+func deleteConversation(conversationID int) error {
+	// Delete associated messages first
+	_, err := db.Exec("DELETE FROM messages WHERE conversation_id = ?", conversationID)
+	if err != nil {
+		return err
+	}
+
+	// Delete the conversation
+	_, err = db.Exec("DELETE FROM conversations WHERE id = ?", conversationID)
+	return err
+}
+
 type Message struct {
 	ID             int    `json:"id"`
 	ConversationID int    `json:"conversation_id"`

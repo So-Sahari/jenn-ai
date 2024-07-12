@@ -104,17 +104,6 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 			})
 		}
 
-		// Fetch updated list of conversations
-		conversations, err := getAllConversations()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve conversations"})
-			return
-		}
-
-		c.HTML(http.StatusOK, "sidebar.html", gin.H{
-			"Conversations": conversations,
-		})
-
 		c.HTML(http.StatusOK, "chat.html", gin.H{
 			"ChatMessages": chatMessages,
 			"Platform":     platform,
