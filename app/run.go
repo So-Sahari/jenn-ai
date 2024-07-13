@@ -8,11 +8,11 @@ import (
 	"net/http"
 	"strings"
 
-	"jenn-ai/internal/bedrock"
 	"jenn-ai/internal/ollama"
 	"jenn-ai/internal/parser"
 	"jenn-ai/internal/state"
 
+	"github.com/So-Sahari/go-bedrock"
 	"github.com/gin-gonic/gin"
 )
 

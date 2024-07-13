@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"net/http"
 
-	"jenn-ai/internal/fuzzy"
-
 	"github.com/gin-gonic/gin"
 )
 
+var modelSource = []string{
+	"Bedrock",
+	"Ollama",
+}
+
 func getModelPlatform(c *gin.Context) {
 	modelPlatform := "<option disabled selected>Model Platform</option>"
-	for _, plat := range fuzzy.ModelSource {
+	for _, plat := range modelSource {
 		modelPlatform += fmt.Sprintf("<option>%s</option>", plat)
 	}
 	c.Data(http.StatusOK, "text/html", []byte(modelPlatform))
