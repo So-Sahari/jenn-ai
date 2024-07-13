@@ -30,13 +30,13 @@
     </select>
   </form>
 
+  <!-- State -->
   <div 
     id="current-state"
     hx-get="/current-state"
     hx-trigger="load, every 5s"
-    class="badge badge-accent badge-outline"
   >
-    <!-- This will be populated with the current state -->
+    {{template "state.html" .}}
   </div>
 </div>
 {{end}}

@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"jenn-ai/internal/state"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,14 +17,23 @@ func (mc *ModelConfig) Serve(ctx context.Context) {
 	initDB()
 	defer db.Close()
 
+	// save model parameters to state
+	state := state.GetState()
+	state.SetMaxTokens(mc.MaxTokens)
+	state.SetTemperature(mc.Temperature)
+	state.SetTopP(mc.TopP)
+	state.SetTopK(mc.TopK)
+
 	router.GET("/", renderIndex)
 	router.GET("/current-state", getCurrentState)
 	router.GET("/messages", getAllMessagesFromDB)
 	router.GET("/message/:id/render", getMessagesFromDB)
 	router.GET("/model-platform", getModelPlatform)
 	router.GET("/model", getModelsByPlatform(ctx, mc.Region))
+	router.GET("/parameters", getParameterState)
 	router.POST("/select-model", selectModel)
 	router.POST("/run", mc.runModel(ctx))
+	router.POST("/parameters", setParameterState)
 	router.POST("/new-conversation", createConversation)
 	router.DELETE("/conversation/:id/delete", deleteChat)
 

@@ -1,0 +1,23 @@
+{{define "parameters.html"}}
+<div id="modelParameters" class="stats stats-vertical shadow">
+  <div class="stat">
+    <div class="stat-title">Max Tokens</div>
+    <div class="stat-value">{{.Tokens}}</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">Top P</div>
+    <div class="stat-value">{{.TopP}}</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">Top K</div>
+    <div class="stat-value">{{.TopK}}</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-title">Temperature</div>
+    <div class="stat-value">{{.Temperature}}</div>
+  </div>
+</div>
+{{end}}

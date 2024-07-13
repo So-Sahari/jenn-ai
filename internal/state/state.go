@@ -9,6 +9,10 @@ type AppState struct {
 	platform       string
 	model          string
 	conversationID int
+	maxTokens      int
+	topP           float64
+	topK           int
+	temperature    float64
 }
 
 var (
@@ -57,4 +61,52 @@ func (s *AppState) GetConversationID() int {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	return s.conversationID
+}
+
+func (s *AppState) SetMaxTokens(maxTokens int) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.maxTokens = maxTokens
+}
+
+func (s *AppState) GetMaxTokens() int {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.maxTokens
+}
+
+func (s *AppState) SetTopK(topK int) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.topK = topK
+}
+
+func (s *AppState) GetTopK() int {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.topK
+}
+
+func (s *AppState) SetTopP(topP float64) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.topP = topP
+}
+
+func (s *AppState) GetTopP() float64 {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.topP
+}
+
+func (s *AppState) SetTemperature(temperature float64) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.temperature = temperature
+}
+
+func (s *AppState) GetTemperature() float64 {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.temperature
 }

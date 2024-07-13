@@ -1,0 +1,81 @@
+{{define "options.html"}}
+<button 
+  class="btn btn-circle" 
+  hx-get="/parameters"
+  hx-trigger="click"
+  hx-target="#modelParameters"
+  onclick="options_modal.showModal()"
+>
+  <i class="fa-solid fa-gear"></i>
+</button>
+<dialog id="options_modal" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="text-lg font-bold">Customize Parameters</h3>
+
+    <div class="flex flex-row items-center space-x-4">
+      {{template "parameters.html" .}}
+
+      <div>
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text">Max Tokens</span>
+          </div>
+          <input 
+            type="text" 
+            name="maxTokens"
+            class="input input-bordered w-full max-w-xs" 
+            hx-post="/parameters"
+            hx-trigger="keyup change from:input"
+            hx-target="#modelParameters"
+          />
+        </label>
+
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text">Top P</span>
+          </div>
+          <input 
+            type="text" 
+            name="topP"
+            class="input input-bordered w-full max-w-xs" 
+            hx-post="/parameters"
+            hx-trigger="keyup change from:input"
+            hx-target="#modelParameters"
+          />
+        </label>
+
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text">Top K</span>
+          </div>
+          <input 
+            type="text" 
+            name="topK"
+            class="input input-bordered w-full max-w-xs" 
+            hx-post="/parameters"
+            hx-trigger="keyup change from:input"
+            hx-target="#modelParameters"
+          />
+        </label>
+
+        <label class="form-control w-full max-w-xs">
+          <div class="label">
+            <span class="label-text">Temperature</span>
+          </div>
+          <input 
+            type="text" 
+            name="temperature"
+            class="input input-bordered w-full max-w-xs" 
+            hx-post="/parameters"
+            hx-trigger="keyup change from:input"
+            hx-target="#modelParameters"
+          />
+        </label>
+      </div>
+    </div>
+  </div>
+</dialog>
+{{end}}
