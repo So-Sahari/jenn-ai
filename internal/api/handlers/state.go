@@ -1,4 +1,4 @@
-package app
+package handlers
 
 import (
 	"log"
@@ -10,7 +10,7 @@ import (
 	"jenn-ai/internal/state"
 )
 
-func getCurrentState(c *gin.Context) {
+func GetCurrentState(c *gin.Context) {
 	appState := state.GetState()
 	model := appState.GetModel()
 	if model == "" {
@@ -23,7 +23,7 @@ func getCurrentState(c *gin.Context) {
 	})
 }
 
-func getParameterState(c *gin.Context) {
+func GetParameterState(c *gin.Context) {
 	appState := state.GetState()
 
 	c.HTML(http.StatusOK, "parameters.html", gin.H{
@@ -34,7 +34,7 @@ func getParameterState(c *gin.Context) {
 	})
 }
 
-func setParameterState(c *gin.Context) {
+func SetParameterState(c *gin.Context) {
 	appState := state.GetState()
 	maxTokens := c.PostForm("maxTokens")
 	if maxTokens != "" {

@@ -23,17 +23,17 @@ COPY . .
 
 RUN go build \
   -o /bin/jenn-ai \
-  -ldflags "-w -s -linkmode external -extldflags "-static"" \ 
-  . && \
+  -ldflags "-w -s -linkmode external -extldflags "-static"" \
+  ./cmd/jennai && \
   chown appuser:appuser /bin/jenn-ai
 
 FROM scratch
 
-# Needed for ssl requirements 
+# Needed for ssl requirements
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 # Used for the unprivileged user
 COPY --from=build /etc/passwd /etc/passwd
-COPY --from=build /etc/group /etc/group 
+COPY --from=build /etc/group /etc/group
 
 WORKDIR /app
 COPY --from=build /bin/jenn-ai /bin/jenn-ai

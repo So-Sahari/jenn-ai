@@ -1,4 +1,4 @@
-package app
+package handlers
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"jenn-ai/internal/state"
 )
 
-func getModelsByPlatform(ctx context.Context, region string) gin.HandlerFunc {
+func GetModelsByPlatform(ctx context.Context, region string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		platform := c.Query("platform-option")
 		appState := state.GetState()
@@ -59,7 +59,7 @@ func getModelsByPlatform(ctx context.Context, region string) gin.HandlerFunc {
 	}
 }
 
-func selectModel(c *gin.Context) {
+func SelectModel(c *gin.Context) {
 	model := c.PostForm("model-option")
 	appState := state.GetState()
 	appState.SetModel(model)

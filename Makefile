@@ -1,4 +1,4 @@
-# This Makefile is used to easy the commands used 
+# This Makefile is used to easy the commands used
 
 deps:
 	@go install github.com/air-verse/air@latest
@@ -7,8 +7,8 @@ local_dev:
 	@air
 
 local:
-	@go install
-	@jenn-ai server
+	@go install ./cmd/jennai
+	@jenn-ai
 
 # default value is set to docker-compose.yaml
 # if you have a gpu, you will want to run:

@@ -1,20 +1,17 @@
-package app
+package handlers
 
 import (
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"jenn-ai/internal/config"
 )
 
-var modelSource = []string{
-	"Bedrock",
-	"Ollama",
-}
-
-func getModelPlatform(c *gin.Context) {
+func GetModelPlatform(c *gin.Context) {
 	modelPlatform := "<option disabled selected>Model Platform</option>"
-	for _, plat := range modelSource {
+	for _, plat := range config.SupportedPlatforms {
 		modelPlatform += fmt.Sprintf("<option>%s</option>", plat)
 	}
 	c.Data(http.StatusOK, "text/html", []byte(modelPlatform))

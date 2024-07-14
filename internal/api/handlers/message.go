@@ -1,4 +1,4 @@
-package app
+package handlers
 
 import (
 	"html/template"
@@ -13,14 +13,7 @@ import (
 	"jenn-ai/internal/state"
 )
 
-type ChatMessage struct {
-	Human    template.HTML
-	Response template.HTML
-	Platform string
-	Model    string
-}
-
-func (mc *ModelConfig) createConversation() gin.HandlerFunc {
+func (mc *ModelConfig) CreateConversation() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		conversationID, err := mc.DB.CreateNewConversation()
 		if err != nil {
@@ -39,7 +32,7 @@ func (mc *ModelConfig) createConversation() gin.HandlerFunc {
 	}
 }
 
-func (mc *ModelConfig) getMessagesFromDB() gin.HandlerFunc {
+func (mc *ModelConfig) GetMessage() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		conversationID, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
@@ -87,7 +80,7 @@ func (mc *ModelConfig) getMessagesFromDB() gin.HandlerFunc {
 	}
 }
 
-func (mc *ModelConfig) getAllMessagesFromDB() gin.HandlerFunc {
+func (mc *ModelConfig) GetAllMessages() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		conversations, err := mc.DB.GetAllConversations()
 		if err != nil {
@@ -101,7 +94,7 @@ func (mc *ModelConfig) getAllMessagesFromDB() gin.HandlerFunc {
 	}
 }
 
-func (mc *ModelConfig) getAllConversations() gin.HandlerFunc {
+func (mc *ModelConfig) GetAllConversations() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		conversations, err := mc.DB.GetAllConversations()
 		if err != nil {
@@ -115,7 +108,7 @@ func (mc *ModelConfig) getAllConversations() gin.HandlerFunc {
 	}
 }
 
-func (mc *ModelConfig) deleteChat() gin.HandlerFunc {
+func (mc *ModelConfig) DeleteChat() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		conversationID, err := strconv.Atoi(c.Param("id"))
 		if err != nil {

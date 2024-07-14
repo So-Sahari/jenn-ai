@@ -1,4 +1,4 @@
-package app
+package handlers
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	"jenn-ai/internal/state"
 )
 
-func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
+func (mc *ModelConfig) Invoke(ctx context.Context) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		appState := state.GetState()
 		platform := appState.GetPlatform()
@@ -109,6 +109,5 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 			"Platform":     platform,
 			"Model":        modelID,
 		})
-
 	}
 }

@@ -4,10 +4,10 @@
     class="flex-grow flex flex-row space-x-2"
     hx-post="/select-model"
     hx-trigger="change from:#model-select"
-    hx-target="#current-state"
+    hx-target="#state"
   >
-    <select 
-      name="platform-option" 
+    <select
+      name="platform-option"
       class="select select-ghost w-full max-w-xs"
       hx-get="/model-platform"
       hx-trigger="load"
@@ -17,9 +17,9 @@
       <option disabled selected value="">Model Platform</option>
     </select>
 
-    <select 
+    <select
       id="model-select"
-      name="model-option" 
+      name="model-option"
       class="select select-ghost w-full max-w-xs"
       hx-get="/model"
       hx-trigger="reset, change from:select[name='platform-option']"
@@ -31,9 +31,9 @@
   </form>
 
   <!-- State -->
-  <div 
-    id="current-state"
-    hx-get="/current-state"
+  <div
+    id="state"
+    hx-get="/state"
     hx-trigger="load, every 5s"
   >
     {{template "state.html" .}}
