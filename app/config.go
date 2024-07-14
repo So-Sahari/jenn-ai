@@ -1,5 +1,7 @@
 package app
 
+import "jenn-ai/internal/db"
+
 type ModelConfig struct {
 	Platform string
 	ModelID  string
@@ -10,6 +12,8 @@ type ModelConfig struct {
 	MaxTokens   int
 
 	Region string // used for AWS models
+
+	DB db.Client // client for db
 }
 
 func NewModelConfig(platform, modelID, region string, temp, topP float64, topK, maxTokens int) ModelConfig {

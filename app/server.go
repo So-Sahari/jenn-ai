@@ -6,16 +6,21 @@ import (
 	"log"
 	"net/http"
 
-	"jenn-ai/internal/state"
-
 	"github.com/gin-gonic/gin"
+
+	"jenn-ai/internal/db"
+	"jenn-ai/internal/state"
 )
 
 func (mc *ModelConfig) Serve(ctx context.Context) {
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
-	initDB()
-	defer db.Close()
+	clientDB, err := db.NewDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer clientDB.Conn.Close()
+	mc.DB = clientDB
 
 	// save model parameters to state
 	state := state.GetState()
@@ -26,16 +31,16 @@ func (mc *ModelConfig) Serve(ctx context.Context) {
 
 	router.GET("/", renderIndex)
 	router.GET("/current-state", getCurrentState)
-	router.GET("/messages", getAllMessagesFromDB)
-	router.GET("/message/:id/render", getMessagesFromDB)
+	router.GET("/messages", mc.getAllMessagesFromDB())
+	router.GET("/message/:id/render", mc.getMessagesFromDB())
 	router.GET("/model-platform", getModelPlatform)
 	router.GET("/model", getModelsByPlatform(ctx, mc.Region))
 	router.GET("/parameters", getParameterState)
 	router.POST("/select-model", selectModel)
 	router.POST("/run", mc.runModel(ctx))
 	router.POST("/parameters", setParameterState)
-	router.POST("/new-conversation", createConversation)
-	router.DELETE("/conversation/:id/delete", deleteChat)
+	router.POST("/new-conversation", mc.createConversation())
+	router.DELETE("/conversation/:id/delete", mc.deleteChat())
 
 	if err := router.Run(":31000"); err != nil {
 		log.Fatal(err)
@@ -44,6 +49,6 @@ func (mc *ModelConfig) Serve(ctx context.Context) {
 
 func renderIndex(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"Message": "JennAI",
+		"Title": "JennAI",
 	})
 }

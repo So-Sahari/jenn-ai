@@ -32,16 +32,16 @@
 
     <div class="flex h-screen">
       <!-- Sidebar -->
-      <div 
-        class="w-64 bg-gray-900 p-4 flex flex-col h-screen" 
-        hx-get="/messages" 
-        hx-trigger="load" 
-        hx-target="#sidebar-messages" 
+      <div
+        class="w-64 bg-gray-900 p-4 flex flex-col h-screen"
+        hx-get="/messages"
+        hx-trigger="load"
+        hx-target="#sidebar-messages"
         hx-swap="innerHTML"
       >
         <div class="flex justify-between items-center text-white text-xl mb-4 space-x-4">
-          <span hx-get="/messages" hx-trigger="click">{{.Message}}</span>
-          <button 
+          <span hx-get="/messages" hx-trigger="click">{{.Title}}</span>
+          <button
             class="btn btn-square btn-outline right-4"
             hx-post="/new-conversation"
             hx-trigger="click"
@@ -83,7 +83,7 @@
 
         <!-- Messages -->
         <div id="htmlOutput" class="flex flex-col flex-grow justify-center pl-40 pr-40">
-          <div 
+          <div
             id="messages"
             class="overflow-y-auto border-0 text-gray-100 mb-20"
             style="max-height: calc(100vh - 200px);"

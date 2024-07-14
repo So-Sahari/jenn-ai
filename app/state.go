@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"jenn-ai/internal/state"
-
 	"github.com/gin-gonic/gin"
+
+	"jenn-ai/internal/state"
 )
 
 func getCurrentState(c *gin.Context) {

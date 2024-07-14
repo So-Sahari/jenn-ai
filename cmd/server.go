@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"jenn-ai/app"
-
 	"github.com/spf13/cobra"
+
+	"jenn-ai/app"
 )
 
 // serverCmd represents the server command

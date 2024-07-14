@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/So-Sahari/go-bedrock"
+	"github.com/gin-gonic/gin"
+
 	"jenn-ai/internal/ollama"
 	"jenn-ai/internal/parser"
 	"jenn-ai/internal/state"
-
-	"github.com/So-Sahari/go-bedrock"
-	"github.com/gin-gonic/gin"
 )
 
 func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
@@ -29,7 +29,7 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 		var err error
 
 		if conversationID == 0 {
-			conversationID, err = createNewConversation()
+			conversationID, err = mc.DB.CreateNewConversation()
 			if err != nil {
 				log.Print(err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create a new conversation"})
@@ -38,7 +38,7 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 			appState.SetConversationID(conversationID)
 		} else {
 			// Retrieve previous messages in the conversation to build the completion context
-			previousMessages, err := getMessagesByConversationID(conversationID)
+			previousMessages, err := mc.DB.GetMessagesByConversationID(conversationID)
 			if err != nil {
 				log.Print(err)
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -78,13 +78,13 @@ func (mc *ModelConfig) runModel(ctx context.Context) gin.HandlerFunc {
 		}
 
 		// Insert message into the database
-		if err := insertMessage(conversationID, message, response, platform, modelID); err != nil {
+		if err := mc.DB.InsertMessage(conversationID, message, response, platform, modelID); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
 		// Retrieve all messages again to update the chat window
-		messages, err := getMessagesByConversationID(conversationID)
+		messages, err := mc.DB.GetMessagesByConversationID(conversationID)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve messages"})
 			return

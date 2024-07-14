@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	"jenn-ai/internal/ollama"
-	"jenn-ai/internal/state"
-
 	"github.com/So-Sahari/go-bedrock"
 	"github.com/gin-gonic/gin"
+
+	"jenn-ai/internal/ollama"
+	"jenn-ai/internal/state"
 )
 
 func getModelsByPlatform(ctx context.Context, region string) gin.HandlerFunc {
