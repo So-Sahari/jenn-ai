@@ -6,8 +6,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func (c *Client) GetAllConversations() ([]Conversation, error) {
-	rows, err := c.Conn.Query(`
+func GetAllConversations() ([]Conversation, error) {
+	rows, err := DB.Query(`
 		SELECT c.id, COALESCE(m.human, ''), COALESCE(m.response, '')
 		FROM conversations c
 		LEFT JOIN messages m ON m.id = (
@@ -36,8 +36,8 @@ func (c *Client) GetAllConversations() ([]Conversation, error) {
 	return conversations, nil
 }
 
-func (c *Client) CreateNewConversation() (int, error) {
-	stmt, err := c.Conn.Prepare("INSERT INTO conversations DEFAULT VALUES RETURNING id")
+func CreateNewConversation() (int, error) {
+	stmt, err := DB.Prepare("INSERT INTO conversations DEFAULT VALUES RETURNING id")
 	if err != nil {
 		return 0, err
 	}
@@ -51,14 +51,14 @@ func (c *Client) CreateNewConversation() (int, error) {
 	return conversationID, nil
 }
 
-func (c *Client) DeleteConversation(conversationID int) error {
+func DeleteConversation(conversationID int) error {
 	// Delete associated messages first
-	_, err := c.Conn.Exec("DELETE FROM messages WHERE conversation_id = ?", conversationID)
+	_, err := DB.Exec("DELETE FROM messages WHERE conversation_id = ?", conversationID)
 	if err != nil {
 		return err
 	}
 
 	// Delete the conversation
-	_, err = c.Conn.Exec("DELETE FROM conversations WHERE id = ?", conversationID)
+	_, err = DB.Exec("DELETE FROM conversations WHERE id = ?", conversationID)
 	return err
 }

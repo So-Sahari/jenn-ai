@@ -10,6 +10,7 @@ import (
 	"jenn-ai/internal/state"
 )
 
+// GetCurrentState returns the current state of the app
 func GetCurrentState(c *gin.Context) {
 	appState := state.GetState()
 	model := appState.GetModel()
@@ -23,6 +24,8 @@ func GetCurrentState(c *gin.Context) {
 	})
 }
 
+// GetParameterState returns the current parameter state
+// containing model parameters
 func GetParameterState(c *gin.Context) {
 	appState := state.GetState()
 
@@ -34,6 +37,7 @@ func GetParameterState(c *gin.Context) {
 	})
 }
 
+// SetParameterState sets the parameters for the model
 func SetParameterState(c *gin.Context) {
 	appState := state.GetState()
 	maxTokens := c.PostForm("maxTokens")

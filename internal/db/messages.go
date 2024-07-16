@@ -6,8 +6,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func (c *Client) InsertMessage(conversationID int, human, response, platform, model string) error {
-	stmt, err := c.Conn.Prepare("INSERT INTO messages(conversation_id, human, response, platform, model) VALUES(?, ?, ?, ?, ?)")
+// InsertMessage inserts a new message into the database
+func InsertMessage(conversationID int, human, response, platform, model string) error {
+	stmt, err := DB.Prepare("INSERT INTO messages(conversation_id, human, response, platform, model) VALUES(?, ?, ?, ?, ?)")
 	if err != nil {
 		return err
 	}
@@ -17,8 +18,9 @@ func (c *Client) InsertMessage(conversationID int, human, response, platform, mo
 	return err
 }
 
-func (c *Client) GetMessagesByConversationID(conversationID int) ([]Message, error) {
-	rows, err := c.Conn.Query(`
+// GetMessagesByConversationID returns all messages in the specified conversation
+func GetMessagesByConversationID(conversationID int) ([]Message, error) {
+	rows, err := DB.Query(`
 		SELECT id, conversation_id, COALESCE(human, ''), COALESCE(response, ''), platform, model 
 		FROM messages 
 		WHERE conversation_id = ? 
@@ -40,8 +42,9 @@ func (c *Client) GetMessagesByConversationID(conversationID int) ([]Message, err
 	return messages, nil
 }
 
-func (c *Client) GetMessageByID(id int) (Message, error) {
+// GetMessageByID returns a message with the specified ID
+func GetMessageByID(id int) (Message, error) {
 	var msg Message
-	err := c.Conn.QueryRow("SELECT id, conversation_id, human, response, platform, model FROM messages WHERE id = ?", id).Scan(&msg.ID, &msg.ConversationID, &msg.Human, &msg.Response, &msg.Platform, &msg.Model)
+	err := DB.QueryRow("SELECT id, conversation_id, human, response, platform, model FROM messages WHERE id = ?", id).Scan(&msg.ID, &msg.ConversationID, &msg.Human, &msg.Response, &msg.Platform, &msg.Model)
 	return msg, err
 }

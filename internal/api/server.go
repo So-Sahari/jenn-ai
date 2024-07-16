@@ -18,12 +18,11 @@ func Serve(ctx context.Context, c config.ModelConfig) {
 
 	mc := handlers.NewParameters(c.Platform, c.ModelID, c.Region, c.Temperature, c.TopP, c.TopK, c.MaxTokens)
 
-	clientDB, err := db.NewDB()
+	err := db.NewDB()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer clientDB.Conn.Close()
-	mc.DB = clientDB
+	defer db.CloseDB()
 
 	// save model parameters to state
 	state := state.GetState()
@@ -34,8 +33,8 @@ func Serve(ctx context.Context, c config.ModelConfig) {
 
 	router.GET("/", handlers.RenderIndex)
 	router.GET("/state", handlers.GetCurrentState)
-	router.GET("/messages", mc.GetAllMessages())
-	router.GET("/message/:id/render", mc.GetMessage())
+	router.GET("/messages", handlers.GetAllMessages)
+	router.GET("/message/:id/render", handlers.GetMessage)
 	router.GET("/model-platform", handlers.GetModelPlatform)
 	router.GET("/model", handlers.GetModelsByPlatform(ctx, mc.Region))
 	router.GET("/parameters", handlers.GetParameterState)
@@ -43,9 +42,9 @@ func Serve(ctx context.Context, c config.ModelConfig) {
 	router.POST("/select-model", handlers.SelectModel)
 	router.POST("/run", mc.Invoke(ctx))
 	router.POST("/parameters", handlers.SetParameterState)
-	router.POST("/new-conversation", mc.CreateConversation())
+	router.POST("/new-conversation", handlers.CreateConversation)
 
-	router.DELETE("/conversation/:id/delete", mc.DeleteChat())
+	router.DELETE("/conversation/:id/delete", handlers.DeleteChat)
 
 	if err := router.Run(":31000"); err != nil {
 		log.Fatal(err)

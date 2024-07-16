@@ -1,7 +1,5 @@
 package config
 
-import "jenn-ai/internal/db"
-
 // ModelConfig contains the parameters for the model
 type ModelConfig struct {
 	Platform    string
@@ -12,6 +10,4 @@ type ModelConfig struct {
 	MaxTokens   int
 
 	Region string // used for AWS models
-
-	DB db.Client // client for db
 }
