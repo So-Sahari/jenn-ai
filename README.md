@@ -18,7 +18,7 @@ Support for models is currently limited to:
 ## Installation
 ```bash
 git clone <repo>
-go install ./cmd/jennai
+go install ./cmd/jenn-ai
 ```
 
 ## Local Development

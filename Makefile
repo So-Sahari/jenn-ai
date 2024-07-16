@@ -2,6 +2,7 @@
 
 deps:
 	@go install github.com/air-verse/air@latest
+	@go mod tidy
 
 local_dev:
 	@air
@@ -9,6 +10,9 @@ local_dev:
 local:
 	@go install ./cmd/jennai
 	@jenn-ai
+
+tests:
+	@go test -cover ./...
 
 # default value is set to docker-compose.yaml
 # if you have a gpu, you will want to run:
