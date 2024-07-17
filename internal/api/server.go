@@ -9,12 +9,16 @@ import (
 	"jenn-ai/internal/api/handlers"
 	"jenn-ai/internal/config"
 	"jenn-ai/internal/db"
+	"jenn-ai/internal/fs"
 	"jenn-ai/internal/state"
 )
 
 func Serve(ctx context.Context, c config.ModelConfig) {
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
+
+	// Use the embedded template set
+	tmpl := fs.GetTemplates()
+	router.SetHTMLTemplate(tmpl)
 
 	mc := handlers.NewParameters(c.Platform, c.ModelID, c.Region, c.Temperature, c.TopP, c.TopK, c.MaxTokens)
 

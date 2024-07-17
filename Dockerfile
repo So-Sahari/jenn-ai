@@ -37,6 +37,5 @@ COPY --from=build /etc/group /etc/group
 
 WORKDIR /app
 COPY --from=build /bin/jenn-ai /bin/jenn-ai
-COPY --from=build /src/templates /app/templates
 USER appuser:appuser
 ENTRYPOINT ["/bin/jenn-ai", "server"]
