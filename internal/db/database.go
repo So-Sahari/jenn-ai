@@ -10,10 +10,10 @@ var DB *sql.DB
 
 // NewDB creates a new database if it doesn't exist
 // and returns an error if it fails
-func NewDB() error {
+func NewDB(dbPath string) error {
 	var err error
 
-	DB, err = sql.Open("sqlite3", "./chat.db")
+	DB, err = sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return err
 	}

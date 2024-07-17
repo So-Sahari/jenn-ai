@@ -13,7 +13,7 @@ import (
 	"jenn-ai/internal/state"
 )
 
-func Serve(ctx context.Context, c config.ModelConfig) {
+func Serve(ctx context.Context, c config.ModelConfig, dbPath string) {
 	router := gin.Default()
 
 	// Use the embedded template set
@@ -22,7 +22,7 @@ func Serve(ctx context.Context, c config.ModelConfig) {
 
 	mc := handlers.NewParameters(c.Platform, c.ModelID, c.Region, c.Temperature, c.TopP, c.TopK, c.MaxTokens)
 
-	err := db.NewDB()
+	err := db.NewDB(dbPath)
 	if err != nil {
 		log.Fatal(err)
 	}

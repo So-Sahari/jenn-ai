@@ -16,6 +16,7 @@ var (
 	topP        = flag.Float64("topP", 0.999, "topP setting")
 	topK        = flag.Int("topK", 250, "topK setting")
 	maxTokens   = flag.Int("max-tokens", 500, "max tokens to sample")
+	dbPath      = flag.String("db-path", "./chat.db", "The path to the sqlite database")
 )
 
 func main() {
@@ -31,5 +32,5 @@ func main() {
 		TopK:        *topK,
 		MaxTokens:   *maxTokens,
 	}
-	api.Serve(ctx, mc)
+	api.Serve(ctx, mc, *dbPath)
 }
