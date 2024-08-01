@@ -3,7 +3,7 @@ module jenn-ai
 go 1.22.4
 
 require (
-	github.com/So-Sahari/go-bedrock v1.0.0
+	github.com/So-Sahari/go-bedrock v1.0.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/ollama/ollama v0.1.48
