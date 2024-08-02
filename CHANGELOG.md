@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.0](https://github.com/So-Sahari/jenn-ai/compare/v1.3.0...v1.4.0) (2024-08-02)
+
+
+### Features
+
+* add parameters and pretty render state ([9181ca8](https://github.com/So-Sahari/jenn-ai/commit/9181ca849129c6e7409323bcf417d676a12791e3))
+* allow db any path with flag ([8cc650a](https://github.com/So-Sahari/jenn-ai/commit/8cc650a895ab203d61427cbac9bb94a4d060e1ba))
+* cleanup unused prompt cli command and implement bedrock package ([8505d07](https://github.com/So-Sahari/jenn-ai/commit/8505d071233801f566b01a30b02fb464c612def7))
+* embed templates ([916aea7](https://github.com/So-Sahari/jenn-ai/commit/916aea7be842d38f3bd99298e39d4ad8381d78b5))
+
+
+### Bug Fixes
+
+* add back hyphen for install ([bb789f2](https://github.com/So-Sahari/jenn-ai/commit/bb789f24e9ac0676634a78c7334418790607377f))
+
 ## [1.3.0](https://github.com/So-Sahari/jenn-ai/compare/v1.2.0...v1.3.0) (2024-07-12)
 
 
