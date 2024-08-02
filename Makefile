@@ -2,6 +2,9 @@
 
 deps:
 	@go install github.com/air-verse/air@latest
+	@go get
+
+tidy:
 	@go mod tidy
 
 local_dev:
